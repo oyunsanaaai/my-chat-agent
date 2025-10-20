@@ -1,55 +1,167 @@
 <!doctype html>
-<html lang="en">
+<html lang="mn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Chat</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Оюунсанаа — Чат</title>
   <style>
-    html,body{margin:0;padding:0;background:#0b1220;font-family:system-ui,Arial}
+    :root{
+      --bg:#0b1220; --panel:rgba(255,255,255,.10);
+      --stroke:rgba(255,255,255,.18); --text:#e5e7eb; --muted:#9aa3b2;
+      --accent:#60a5fa; --accent-2:#22d3ee;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 600px at 10% -10%, #1f3b8a44, transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, #0ea5e944, transparent 60%),
+        var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      color:var(--text);
+      display:flex; gap:20px;
+    }
+    /* sidebar */
+    .side{
+      width:240px; min-width:220px; padding:16px;
+      backdrop-filter: blur(14px);
+      background: var(--panel);
+      border:1px solid var(--stroke);
+      border-radius:18px; margin:16px; height:calc(100% - 32px);
+    }
+    .brand{font-weight:700; letter-spacing:.3px; margin-bottom:12px}
+    .menu{display:flex; flex-direction:column; gap:10px}
+    .mi{
+      padding:10px 12px; border-radius:12px; color:var(--muted);
+      border:1px solid transparent; cursor:pointer; user-select:none;
+    }
+    .mi:hover{color:var(--text); border-color:var(--stroke); background:rgba(255,255,255,.06)}
+    .mi.active{
+      color:#fff; border-color:transparent;
+      background: linear-gradient(135deg, rgba(96,165,250,.35), rgba(34,211,238,.25));
+      box-shadow: 0 8px 24px rgba(34,211,238,.12);
+    }
+
+    /* chat panel */
+    .wrap{
+      flex:1; display:flex; flex-direction:column; gap:16px;
+      margin:16px 16px 16px 0;
+    }
+    .panel{
+      backdrop-filter: blur(14px);
+      background: var(--panel);
+      border:1px solid var(--stroke);
+      border-radius:18px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    .head{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .title{font-weight:700}
+    .messages{
+      height:56vh; overflow:auto; margin-top:12px; padding:10px;
+      background:rgba(255,255,255,.06); border:1px solid var(--stroke); border-radius:12px;
+    }
+    .msg{margin:8px 0; line-height:1.5}
+    .me   .bubble{background:linear-gradient(135deg, rgba(96,165,250,.35), rgba(34,211,238,.25));}
+    .bot  .bubble{background:rgba(255,255,255,.08)}
+    .bubble{
+      display:inline-block; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke);
+      max-width:90%;
+    }
+    .imgthumb{max-width:160px; border-radius:10px; display:block; margin-top:6px; border:1px solid var(--stroke)}
+    .composer{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+    .in{
+      flex:1; min-width:240px; padding:10px 12px; border-radius:12px; outline:none;
+      border:1px solid var(--stroke); background:rgba(255,255,255,.07); color:var(--text)
+    }
+    .btn{
+      padding:10px 14px; border-radius:12px; border:1px solid transparent; cursor:pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#012; font-weight:700;
+    }
+    .btn:active{transform:translateY(1px)}
+    .hint{color:var(--muted); font-size:12px}
+
+    @media (max-width:960px){
+      .side{display:none}
+      .wrap{margin:16px}
+      .messages{height:60vh}
+    }
   </style>
 </head>
 <body>
-  <!-- UI -->
-  <div id="chat-container" style="max-width:600px;margin:50px auto;padding:20px;border-radius:16px;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.2)">
-    <h2 style="color:#fff;text-align:center;margin:0 0 12px">AI Chat (зурагтай)</h2>
-    <div id="messages" style="height:320px;overflow:auto;border:1px solid #334155;background:#fff;border-radius:8px;padding:10px"></div>
-    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-      <input type="file" id="imageInput" accept="image/*" />
-      <input id="userInput" placeholder="Бичих..." style="flex:1;min-width:220px;padding:8px">
-      <button onclick="sendMessage()" style="padding:8px 14px">Илгээх</button>
+  <aside class="side">
+    <div class="brand">Оюунсанаа — Чат</div>
+    <div class="menu">
+      <div class="mi active">Бүртгэл</div>
+      <div class="mi">Миний хөтөлбөр</div>
+      <div class="mi">Сэтгэлийн хоточ</div>
+      <div class="mi">Эрүүл мэнд</div>
+      <div class="mi">Санхүү</div>
+      <div class="mi">Зорилго</div>
+      <div class="mi">Хариуцах</div>
+      <div class="mi">Тэмдэглэл</div>
     </div>
-  </div>
+  </aside>
+
+  <main class="wrap">
+    <section class="panel">
+      <div class="head">
+        <div class="title">AI Chat (зурагтай)</div>
+        <div class="hint">Одоогоор demo UI — AI API-д холбохоос өмнө гадаад төрхөө зөв болгов.</div>
+      </div>
+
+      <div id="messages" class="messages"></div>
+
+      <div class="composer">
+        <input id="img" type="file" accept="image/*">
+        <input id="text" class="in" placeholder="Зурвас бичнэ үү…">
+        <button class="btn" onclick="send()">Илгээх</button>
+      </div>
+    </section>
+  </main>
 
   <script>
-    async function sendMessage(){
-      const input=document.getElementById('userInput');
-      const imgIn=document.getElementById('imageInput');
-      const box=document.getElementById('messages');
-      const msg=(input.value||'').trim();
-      if(!msg && !imgIn.files.length) return;
+    const box = document.getElementById('messages');
+    const t   = document.getElementById('text');
+    const f   = document.getElementById('img');
 
-      const u=document.createElement('div');
-      u.innerHTML='<b>Та:</b> '+(msg||'(зураг илгээлээ)');
-      box.appendChild(u);
-
-      if(imgIn.files.length){
-        const f=imgIn.files[0];
-        const img=document.createElement('img');
-        img.src=URL.createObjectURL(f);
-        img.style.maxWidth='120px';
-        img.style.display='block';
-        img.style.margin='6px 0';
-        box.appendChild(img);
-      }
-
-      const a=document.createElement('div');
-      a.innerHTML='<b>AI:</b> Зургаа хүлээж авлаа. Таны бичсэн: '+(msg||'—');
-      box.appendChild(a);
-
-      input.value='';
-      imgIn.value='';
-      box.scrollTop=box.scrollHeight;
+    function add(role, html){
+      const row = document.createElement('div');
+      row.className = 'msg ' + (role==='me'?'me':'bot');
+      row.innerHTML = `<div class="bubble">${html}</div>`;
+      box.appendChild(row);
+      box.scrollTop = box.scrollHeight;
     }
+
+    function previewImage(file){
+      return new Promise((res)=>{
+        const r=new FileReader();
+        r.onload=()=>res(`<img class="imgthumb" src="${r.result}" alt="image">`);
+        r.readAsDataURL(file);
+      });
+    }
+
+    async function send(){
+      const msg = (t.value||'').trim();
+      const file = f.files[0];
+
+      if(!msg && !file) return;
+
+      let html = '';
+      if(msg) html += msg;
+      if(file) html += `<br>${await previewImage(file)}`;
+
+      add('me', html);
+
+      // Demo bot (одоохондоо server/API ашиглахгүй)
+      setTimeout(()=>{
+        add('bot', '🤖 Хүлээн авлаа. Дараагийн алхам — AI API-д холбож өгнө.');
+      }, 400);
+
+      t.value=''; f.value='';
+    }
+
+    // эхний мессеж
+    add('bot','Сайн байна уу! Зургаа хавсаргаад, доор мессежээ бичээд илгээнэ үү.');
   </script>
 </body>
 </html>
