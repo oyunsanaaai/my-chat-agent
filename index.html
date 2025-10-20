@@ -1,47 +1,55 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="AI-powered chat agent built with Cloudflare Agents"
-    />
-    <meta name="theme-color" content="#000000" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chat</title>
+  <style>
+    html,body{margin:0;padding:0;background:#0b1220;font-family:system-ui,Arial}
+  </style>
+</head>
+<body>
+  <!-- UI -->
+  <div id="chat-container" style="max-width:600px;margin:50px auto;padding:20px;border-radius:16px;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.2)">
+    <h2 style="color:#fff;text-align:center;margin:0 0 12px">AI Chat (зурагтай)</h2>
+    <div id="messages" style="height:320px;overflow:auto;border:1px solid #334155;background:#fff;border-radius:8px;padding:10px"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <input type="file" id="imageInput" accept="image/*" />
+      <input id="userInput" placeholder="Бичих..." style="flex:1;min-width:220px;padding:8px">
+      <button onclick="sendMessage()" style="padding:8px 14px">Илгээх</button>
+    </div>
+  </div>
 
-    <title>AI Chat Agent</title>
+  <script>
+    async function sendMessage(){
+      const input=document.getElementById('userInput');
+      const imgIn=document.getElementById('imageInput');
+      const box=document.getElementById('messages');
+      const msg=(input.value||'').trim();
+      if(!msg && !imgIn.files.length) return;
 
-    <script>
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.theme === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
-    </script>
+      const u=document.createElement('div');
+      u.innerHTML='<b>Та:</b> '+(msg||'(зураг илгээлээ)');
+      box.appendChild(u);
 
-    <!-- Favicon support -->
-    <link rel="icon" href="/favicon.ico" />
-
-    <!-- Preload fonts if any -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Prevent flash of unstyled content -->
-    <style>
-      html {
-        background: var(--background);
+      if(imgIn.files.length){
+        const f=imgIn.files[0];
+        const img=document.createElement('img');
+        img.src=URL.createObjectURL(f);
+        img.style.maxWidth='120px';
+        img.style.display='block';
+        img.style.margin='6px 0';
+        box.appendChild(img);
       }
-      @media (prefers-color-scheme: dark) {
-        html {
-          background: var(--background);
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="app"></div>
-    <script type="module" src="/src/client.tsx"></script>
-  </body>
+
+      const a=document.createElement('div');
+      a.innerHTML='<b>AI:</b> Зургаа хүлээж авлаа. Таны бичсэн: '+(msg||'—');
+      box.appendChild(a);
+
+      input.value='';
+      imgIn.value='';
+      box.scrollTop=box.scrollHeight;
+    }
+  </script>
+</body>
 </html>
