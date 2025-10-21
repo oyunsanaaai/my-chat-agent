@@ -1,167 +1,155 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="mn">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Оюунсанаа — Чат</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Оюунсанаа — Нэвтрэх</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b1220; --panel:rgba(255,255,255,.10);
-      --stroke:rgba(255,255,255,.18); --text:#e5e7eb; --muted:#9aa3b2;
-      --accent:#60a5fa; --accent-2:#22d3ee;
+      --bg1:#0b2440;
+      --bg2:#14365e;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.18);
+      --text:#eaf2ff;
+      --muted:#b7c7e6;
+      --btn:#6aa9ff;
     }
-    *{box-sizing:border-box} html,body{height:100%}
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
-      margin:0; background:
-        radial-gradient(1200px 600px at 10% -10%, #1f3b8a44, transparent 60%),
-        radial-gradient(900px 500px at 110% 10%, #0ea5e944, transparent 60%),
-        var(--bg);
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
       color:var(--text);
-      display:flex; gap:20px;
+      background: radial-gradient(1200px 800px at 20% 10%, #1b3766 0%, transparent 60%),
+                  radial-gradient(900px 700px at 80% 90%, #0d4a6a 0%, transparent 60%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      display:grid; place-items:center; padding:24px;
     }
-    /* sidebar */
-    .side{
-      width:240px; min-width:220px; padding:16px;
-      backdrop-filter: blur(14px);
-      background: var(--panel);
+    .card{
+      width:min(92vw,520px);
+      padding:28px;
+      border-radius:18px;
+      background:var(--card);
       border:1px solid var(--stroke);
-      border-radius:18px; margin:16px; height:calc(100% - 32px);
+      backdrop-filter: blur(16px) saturate(120%);
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
     }
-    .brand{font-weight:700; letter-spacing:.3px; margin-bottom:12px}
-    .menu{display:flex; flex-direction:column; gap:10px}
-    .mi{
-      padding:10px 12px; border-radius:12px; color:var(--muted);
-      border:1px solid transparent; cursor:pointer; user-select:none;
+    .head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .logo{
+      width:40px;height:40px;border-radius:12px;
+      background:radial-gradient(circle at 30% 30%, #9fd3ff, #4a86ff);
+      display:grid;place-items:center;color:#00234a;font-weight:800
     }
-    .mi:hover{color:var(--text); border-color:var(--stroke); background:rgba(255,255,255,.06)}
-    .mi.active{
-      color:#fff; border-color:transparent;
-      background: linear-gradient(135deg, rgba(96,165,250,.35), rgba(34,211,238,.25));
-      box-shadow: 0 8px 24px rgba(34,211,238,.12);
+    h1{font-size:20px;margin:0}
+    p.sub{margin:0 0 16px 0;color:var(--muted);font-size:14px}
+    label{font-size:13px;color:var(--muted);display:block;margin:12px 0 6px}
+    input[type="text"], input[type="password"]{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--stroke);
+      background:rgba(0,0,0,.25); color:var(--text); outline:none;
     }
-
-    /* chat panel */
-    .wrap{
-      flex:1; display:flex; flex-direction:column; gap:16px;
-      margin:16px 16px 16px 0;
-    }
-    .panel{
-      backdrop-filter: blur(14px);
-      background: var(--panel);
-      border:1px solid var(--stroke);
-      border-radius:18px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.25);
-    }
-    .head{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .title{font-weight:700}
-    .messages{
-      height:56vh; overflow:auto; margin-top:12px; padding:10px;
-      background:rgba(255,255,255,.06); border:1px solid var(--stroke); border-radius:12px;
-    }
-    .msg{margin:8px 0; line-height:1.5}
-    .me   .bubble{background:linear-gradient(135deg, rgba(96,165,250,.35), rgba(34,211,238,.25));}
-    .bot  .bubble{background:rgba(255,255,255,.08)}
-    .bubble{
-      display:inline-block; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke);
-      max-width:90%;
-    }
-    .imgthumb{max-width:160px; border-radius:10px; display:block; margin-top:6px; border:1px solid var(--stroke)}
-    .composer{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
-    .in{
-      flex:1; min-width:240px; padding:10px 12px; border-radius:12px; outline:none;
-      border:1px solid var(--stroke); background:rgba(255,255,255,.07); color:var(--text)
-    }
+    input:focus{border-color:#8ec1ff; box-shadow:0 0 0 3px rgba(110,169,255,.2)}
+    .row{display:flex;gap:12px;margin-top:16px}
     .btn{
-      padding:10px 14px; border-radius:12px; border:1px solid transparent; cursor:pointer;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#012; font-weight:700;
+      flex:1; padding:12px 16px;border-radius:12px;border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04); color:var(--text); font-weight:600; cursor:pointer;
     }
-    .btn:active{transform:translateY(1px)}
-    .hint{color:var(--muted); font-size:12px}
-
-    @media (max-width:960px){
-      .side{display:none}
-      .wrap{margin:16px}
-      .messages{height:60vh}
-    }
+    .btn.primary{background:var(--btn); border-color:transparent; color:#081c3a}
+    .muted{display:flex;justify-content:space-between;align-items:center;margin-top:12px;color:var(--muted);font-size:13px}
+    .muted a{color:#a9c8ff;text-decoration:none}
+    .remember{display:flex;align-items:center;gap:8px}
+    .err{margin-top:12px;color:#ffb4b4;font-size:13px;display:none}
+    .top{position:fixed;inset:16px auto auto 16px;color:#9fc0ff;font-size:13px;opacity:.7}
   </style>
 </head>
 <body>
-  <aside class="side">
-    <div class="brand">Оюунсанаа — Чат</div>
-    <div class="menu">
-      <div class="mi active">Бүртгэл</div>
-      <div class="mi">Миний хөтөлбөр</div>
-      <div class="mi">Сэтгэлийн хоточ</div>
-      <div class="mi">Эрүүл мэнд</div>
-      <div class="mi">Санхүү</div>
-      <div class="mi">Зорилго</div>
-      <div class="mi">Хариуцах</div>
-      <div class="mi">Тэмдэглэл</div>
+  <div class="top">OS — CHAT</div>
+  <div class="card">
+    <div class="head">
+      <div class="logo">O</div>
+      <div>
+        <h1>Оюунсанаа · Нэвтрэх</h1>
+        <p class="sub">Шинэ хэрэглэгчид oyunsanaa.com дээр бүртгүүлнэ, гишүүд шууд нэвтэрнэ.</p>
+      </div>
     </div>
-  </aside>
 
-  <main class="wrap">
-    <section class="panel">
-      <div class="head">
-        <div class="title">AI Chat (зурагтай)</div>
-        <div class="hint">Одоогоор demo UI — AI API-д холбохоос өмнө гадаад төрхөө зөв болгов.</div>
-      </div>
+    <label>И-мэйл эсвэл утас</label>
+    <input id="email" type="text" placeholder="name@mail.com эсвэл 8811••••" autocomplete="username" />
 
-      <div id="messages" class="messages"></div>
+    <label>Нууц үг</label>
+    <input id="pass" type="password" placeholder="••••••••" autocomplete="current-password" />
 
-      <div class="composer">
-        <input id="img" type="file" accept="image/*">
-        <input id="text" class="in" placeholder="Зурвас бичнэ үү…">
-        <button class="btn" onclick="send()">Илгээх</button>
-      </div>
-    </section>
-  </main>
+    <div class="muted">
+      <label class="remember"><input id="remember" type="checkbox" /> Намайг сана</label>
+      <a href="https://oyunsanaa.com/support" target="_blank">Нууц үг мартсан</a>
+    </div>
+
+    <div class="row">
+      <button id="login" class="btn primary">Гишүүд нэвтрэх</button>
+      <button id="signup" class="btn">Шинэ хэрэглэгч</button>
+    </div>
+
+    <div id="err" class="err">Нэвтрэх амжилтгүй. Нууц үгээ шалгаарай.</div>
+  </div>
 
   <script>
-    const box = document.getElementById('messages');
-    const t   = document.getElementById('text');
-    const f   = document.getElementById('img');
-
-    function add(role, html){
-      const row = document.createElement('div');
-      row.className = 'msg ' + (role==='me'?'me':'bot');
-      row.innerHTML = `<div class="bubble">${html}</div>`;
-      box.appendChild(row);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function previewImage(file){
-      return new Promise((res)=>{
-        const r=new FileReader();
-        r.onload=()=>res(`<img class="imgthumb" src="${r.result}" alt="image">`);
-        r.readAsDataURL(file);
+    document.getElementById('signup').onclick = () => {
+      window.location.href = 'https://oyunsanaa.com';
+    };
+    document.getElementById('login').onclick = async () => {
+      const pass = document.getElementById('pass').value.trim();
+      const remember = document.getElementById('remember').checked;
+      const r = await fetch('/api/login', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ pass, remember })
       });
-    }
-
-    async function send(){
-      const msg = (t.value||'').trim();
-      const file = f.files[0];
-
-      if(!msg && !file) return;
-
-      let html = '';
-      if(msg) html += msg;
-      if(file) html += `<br>${await previewImage(file)}`;
-
-      add('me', html);
-
-      // Demo bot (одоохондоо server/API ашиглахгүй)
-      setTimeout(()=>{
-        add('bot', '🤖 Хүлээн авлаа. Дараагийн алхам — AI API-д холбож өгнө.');
-      }, 400);
-
-      t.value=''; f.value='';
-    }
-
-    // эхний мессеж
-    add('bot','Сайн байна уу! Зургаа хавсаргаад, доор мессежээ бичээд илгээнэ үү.');
+      if (r.ok) {
+        window.location.replace('/chat');
+      } else {
+        document.getElementById('err').style.display = 'block';
+      }
+    };
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
