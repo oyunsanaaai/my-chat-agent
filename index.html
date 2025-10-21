@@ -1,114 +1,116 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="mn">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>oyunsanaa · чат</title>
-  <link rel="stylesheet" href="oy.css"/>
-  <script defer src="oy.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Оюунсанаа — Нэвтрэх</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0b2440;
+      --bg2:#14365e;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.18);
+      --text:#eaf2ff;
+      --muted:#b7c7e6;
+      --btn:#6aa9ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 20% 10%, #1b3766 0%, transparent 60%),
+                  radial-gradient(900px 700px at 80% 90%, #0d4a6a 0%, transparent 60%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      display:grid; place-items:center; padding:24px;
+    }
+    .card{
+      width:min(92vw,520px);
+      padding:28px;
+      border-radius:18px;
+      background:var(--card);
+      border:1px solid var(--stroke);
+      backdrop-filter: blur(16px) saturate(120%);
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
+    }
+    .head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .logo{
+      width:40px;height:40px;border-radius:12px;
+      background:radial-gradient(circle at 30% 30%, #9fd3ff, #4a86ff);
+      display:grid;place-items:center;color:#00234a;font-weight:800
+    }
+    h1{font-size:20px;margin:0}
+    p.sub{margin:0 0 16px 0;color:var(--muted);font-size:14px}
+    label{font-size:13px;color:var(--muted);display:block;margin:12px 0 6px}
+    input[type="text"], input[type="password"]{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--stroke);
+      background:rgba(0,0,0,.25); color:var(--text); outline:none;
+    }
+    input:focus{border-color:#8ec1ff; box-shadow:0 0 0 3px rgba(110,169,255,.2)}
+    .row{display:flex;gap:12px;margin-top:16px}
+    .btn{
+      flex:1; padding:12px 16px;border-radius:12px;border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04); color:var(--text); font-weight:600; cursor:pointer;
+    }
+    .btn.primary{background:var(--btn); border-color:transparent; color:#081c3a}
+    .muted{display:flex;justify-content:space-between;align-items:center;margin-top:12px;color:var(--muted);font-size:13px}
+    .muted a{color:#a9c8ff;text-decoration:none}
+    .remember{display:flex;align-items:center;gap:8px}
+    .err{margin-top:12px;color:#ffb4b4;font-size:13px;display:none}
+    .top{position:fixed;inset:16px auto auto 16px;color:#9fc0ff;font-size:13px;opacity:.7}
+  </style>
 </head>
 <body>
-  <!-- overlay (mobile drawer) -->
-  <div id="oyOverlay" class="oy-overlay" hidden></div>
-
-  <!-- HEADER -->
-  <header class="oy-header">
-    <!-- Меню товч -->
-    <button id="btnDrawer" class="oy-iconbtn" aria-label="Меню">
-      <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>
-    </button>
-
-    <!-- Лого + гарчиг -->
-    <div class="oy-head-title">
-      <!-- ЛОГО: logo.png байвал автоматаар ашиглана -->
-      <div class="oy-logo">
-        <img id="oyLogoImg" src="logo.png" alt="logo" onerror="this.style.display='none'"/>
-        <span id="oyLogoFallback">O</span>
-      </div>
-      <div class="oy-head-text">
-        <div id="chatTitle" class="oy-title">oyunsanaa — Чат</div>
-        <div class="oy-status"><span class="oy-dot"></span>Online</div>
+  <div class="top">OS — CHAT</div>
+  <div class="card">
+    <div class="head">
+      <div class="logo">O</div>
+      <div>
+        <h1>Оюунсанаа · Нэвтрэх</h1>
+        <p class="sub">Шинэ хэрэглэгчид oyunsanaa.com дээр бүртгүүлнэ, гишүүд шууд нэвтэрнэ.</p>
       </div>
     </div>
 
-    <!-- Өнгө солигч -->
-    <div id="themePicker" class="oy-themes" aria-label="Өнгө сонгох"></div>
+    <label>И-мэйл эсвэл утас</label>
+    <input id="email" type="text" placeholder="name@mail.com эсвэл 8811••••" autocomplete="username" />
 
-    <!-- Богино холбоосууд -->
-    <nav class="oy-head-links">
-      <a id="linkSignup" class="oy-pill" href="https://YOUR-WIX-SITE.com/checkout" target="_blank">🗝️ Бүртгүүлэх</a>
-      <a class="oy-pill" href="https://YOUR-WIX-SITE.com/my-program" target="_blank">Миний хөтөлбөр</a>
-    </nav>
-  </header>
+    <label>Нууц үг</label>
+    <input id="pass" type="password" placeholder="••••••••" autocomplete="current-password" />
 
-  <div class="oy-shell">
-    <!-- SIDEBAR -->
-    <aside id="oyDrawer" class="oy-drawer" aria-label="Меню">
-      <div class="oy-side">
-        <div class="oy-side-title">Меню</div>
+    <div class="muted">
+      <label class="remember"><input id="remember" type="checkbox" /> Намайг сана</label>
+      <a href="https://oyunsanaa.com/support" target="_blank">Нууц үг мартсан</a>
+    </div>
 
-        <a class="oy-item" id="mSignup" href="https://YOUR-WIX-SITE.com/checkout" target="_blank">Бүртгүүлэх</a>
-        <a class="oy-item" href="https://YOUR-WIX-SITE.com/my-program" target="_blank">Миний хөтөлбөр</a>
-        <button class="oy-item" data-pane-open="guides">Сэтгэлийн хөтөч</button>
-        <button class="oy-item" data-pane-open="edu">Сэтгэлийн боловсрол</button>
+    <div class="row">
+      <button id="login" class="btn primary">Гишүүд нэвтрэх</button>
+      <button id="signup" class="btn">Шинэ хэрэглэгч</button>
+    </div>
 
-        <!-- Хөтөч -->
-        <section class="oy-pane" id="pane-guides" hidden>
-          <div class="oy-note">Насны ангилалуудаас сонгоно. Тайлбарыг нэрийн дор харуулсан.</div>
-          <div id="ageList" class="oy-age"></div>
-        </section>
-
-        <!-- Боловсрол -->
-        <section class="oy-pane" id="pane-edu" hidden>
-          <h4>Багц хөтөлбөр</h4>
-          <ul class="oy-list">
-            <li><span>Гэр бүл ба хайр</span> <a class="oy-mini" target="_blank" href="https://YOUR-WIX-SITE.com/packs/family-love">Орох</a></li>
-            <li><span>Өөртөө итгэх итгэл</span> <a class="oy-mini" target="_blank" href="https://YOUR-WIX-SITE.com/packs/confidence">Орох</a></li>
-            <li><span>Карьер ба зорилго</span> <a class="oy-mini" target="_blank" href="https://YOUR-WIX-SITE.com/packs/career">Орох</a></li>
-          </ul>
-
-          <h4 style="margin-top:12px">Нэмэлт хөтөлбөр</h4>
-          <ul class="oy-list">
-            <li><span>Ганцаардлаас гарах 14 хоног</span> <a class="oy-mini" target="_blank" href="https://YOUR-WIX-SITE.com/programs/loneliness14">Орох</a></li>
-            <li><span>Сэтгэл түгших тайвшруулах</span> <a class="oy-mini" target="_blank" href="https://YOUR-WIX-SITE.com/programs/anxiety">Орох</a></li>
-          </ul>
-        </section>
-      </div>
-    </aside>
-
-    <!-- CHAT -->
-    <main class="oy-main">
-      <div id="oyStream" class="oy-stream"></div>
-
-      <div class="oy-composer">
-        <label for="oyFile" class="oy-file" title="Зураг / файл">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 8.5l-8.485 8.485a5 5 0 11-7.071-7.071L14.5 1.858a3.5 3.5 0 114.95 4.95L9.88 16.379a2 2 0 11-2.828-2.828L16 4.603"
-              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          </svg>
-        </label>
-        <input id="oyFile" type="file" accept="image/*" hidden/>
-
-        <div class="oy-input-wrap">
-          <textarea id="oyInput" rows="1" placeholder="Энд бичээд Enter дарна уу…"></textarea>
-          <div id="typing" class="oy-typing" hidden><span></span><span></span><span></span></div>
-        </div>
-
-        <button id="btnSend" class="oy-send" title="Илгээх">➤</button>
-      </div>
-    </main>
+    <div id="err" class="err">Нэвтрэх амжилтгүй. Нууц үгээ шалгаарай.</div>
   </div>
+
+  <script>
+    document.getElementById('signup').onclick = () => {
+      window.location.href = 'https://oyunsanaa.com';
+    };
+    document.getElementById('login').onclick = async () => {
+      const pass = document.getElementById('pass').value.trim();
+      const remember = document.getElementById('remember').checked;
+      const r = await fetch('/api/login', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ pass, remember })
+      });
+      if (r.ok) {
+        window.location.replace('/chat');
+      } else {
+        document.getElementById('err').style.display = 'block';
+      }
+    };
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
